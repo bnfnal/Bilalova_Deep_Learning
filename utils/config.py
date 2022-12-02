@@ -11,7 +11,7 @@ from utils.config_models.config_train import ConfigTrain
 
 
 class Config:
-    """Config class which contains data, train and model hyperparameters"""
+    """Config class which contains datasets, train and model hyperparameters"""
 
     def __init__(self):
         self.from_json()
@@ -20,6 +20,6 @@ class Config:
     def from_json(self):
         """Creates config from json"""
 
-        self.data = ConfigData(CFG['data'])
+        self.data = ConfigData(CFG['datasets'])
         self.train = ConfigTrain(CFG['train'])
         self.model = ConfigModel(CFG['model'])
