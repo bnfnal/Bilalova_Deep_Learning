@@ -24,6 +24,6 @@ class SGD:
         """
         dz_dl = self.loss.backward(dz_dl)     # получаем значение градиента по целевой функции
         for layer in reversed(self.net.parameters):   # при исп input - вызывается метод __call__ из соотв слоя
-            dz_dl = layer.backword(dz_dl)
+            dz_dl = layer.backward(dz_dl)
             layer.update_weights(self.update_rule)
         return input

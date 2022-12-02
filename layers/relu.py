@@ -8,7 +8,7 @@ class ReLU(BaseLayerClass):
 
     def __call__(self, x, phase):   # forward
         self.x = x
-        return np.max(0, x)
+        return np.clip(x, a_min=0, a_max=None)   #значения, выходящие за пределы отрезка принимают граничные значения
 
     def get_grad(self):
         # np.dot, np.zeros_like/np.ones_like, np.zeros(), np.random...,
@@ -19,4 +19,5 @@ class ReLU(BaseLayerClass):
         return self.grads
 
     def backward(self, dy):
+        self.get_grad()
         return dy * self.grads

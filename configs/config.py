@@ -24,7 +24,7 @@ CFG = {
             "type": "adam"
         },
         "metrics": ["accuracy", "balanced_accuracy"],
-        "learning_rate": 0.01
+        "learning_rate": 0.001
     },
     "model": {
         "parametrs" : [('FullyConnected', {'input_size': 784, 'output_size': 128}), ('ReLU', {}), ('FullyConnected', {'input_size': 128, 'output_size': 10})]

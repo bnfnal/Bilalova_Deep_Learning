@@ -1,5 +1,5 @@
 import numpy as np
-
+from tensorboardX import SummaryWriter
 from configs.config import CFG
 from dataloader.dataloader import DataLoader
 from datasets.mnist_dataset import MNISTDataset
@@ -15,7 +15,7 @@ class Trainer:
         self.net = Model(CFG['model']['parametrs'])
         self.loss = CrossEntripyLoss()
         self.optimiser = SGD(CFG['train']['learning_rate'], self.net, self.loss)
-        self.epochs = []
+        self.epochs = CFG['train']['nrof_epoch']
         self.train_dataset = MNISTDataset(dataset_type=DataSetType.train,
                                transforms=[Normalize(), View()],
                                nrof_classes=cfg.data.nrof_classes)
@@ -46,10 +46,12 @@ class Trainer:
         вызов train_epoch;
         вызов evaluate для обучающей и валидационной выборки последовательно
         """
-        for epoch in self.epochs:
+        for epoch in range(self.epochs):
             self.train_epoch()
+            self.evaluate(self.train_dataloader, 'train')
+            self.evaluate(self.test_dataloader, 'test')
 
-    def evaluate(self, dataloader):
+    def evaluate(self, dataloader, dataset_type):
         """
         функция вычисления значения целевой функции и точности
         на всех данных из dataloader, сохранение результатов в tensorboard/mlflow/plotly
@@ -76,13 +78,16 @@ class Trainer:
         """
         logits = self.net(batch)
         batch_loss = self.loss(logits, labels)
-        batch_acurasy = np.argmax(logits, 1)
+        batch_accuracy = (np.argmax(logits, 1) == labels).mean()
         self.optimiser.minimize()
-        return batch_loss, batch_acurasy    # значения целевой функции и точности на этом батче
+        return batch_loss, batch_accuracy    # значения целевой функции и точности на этом батче
 
     def overfit_on_batch(self):
         batch, labels = next(self.train_dataloader.batch_generator())
         # берем 1 батч из выборки и на протяжении
+        self.net.train()
         for i in range(1000):
-            self._train_step(batch, labels)
+            batch_loss, batch_acurasy = self._train_step(batch, labels)
+            print(batch_loss, batch_acurasy)
             # значение точности на протяжении 10 шагов подряд была 100%
+        self.net.eval()

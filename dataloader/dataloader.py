@@ -44,6 +44,7 @@ class DataLoader:
         :return:
         """
         img, label = self.__batch_img
+        img = img.reshape((img.shape[0], int(sqrt(img.shape[1])), int(sqrt(img.shape[1]))))
 
         for image in img:
             image = np.array(image, dtype='uint8')

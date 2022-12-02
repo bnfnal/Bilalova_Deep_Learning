@@ -37,10 +37,10 @@ class FullyConnected(BaseLayerClass):
 
     def backward(self, dy):   # градиенты по текущему слою относ целевой функции  df_dx
         self.get_grad()
-        self.x_grad = np.dot(self.grads[0], dy)
-        self.weight_grad = np.dot(self.grads[1], dy)
-        self.bias_grad = self.grads[2] * dy
-        return self.x_grad
+        self.x_grad = np.dot(self.grads[0], dy.T)
+        self.weight_grad = (np.dot(self.grads[1].T, dy))/len(dy)
+        self.bias_grad = np.mean(self.grads[2] * dy, 0)
+        return self.x_grad.T
 
     def update_weights(self, update_func):
         """
@@ -48,5 +48,5 @@ class FullyConnected(BaseLayerClass):
         :param update_func: функция обновления, указано в презентации
         """
         self.weight = self.weight - update_func(self.weight_grad)
-        self.weight = self.bias - update_func(self.bias_grad)
+        self.bias = self.bias - update_func(self.bias_grad)
 

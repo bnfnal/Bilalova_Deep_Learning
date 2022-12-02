@@ -24,7 +24,7 @@ class Model(BaseModel):
         """
         for layer in self.parameters:   # при исп input - вызывается метод __call__ из соотв слоя
             input = layer(input, self.phase)
-        return  input
+        return input
 
     def get_parameters(self):
         """
