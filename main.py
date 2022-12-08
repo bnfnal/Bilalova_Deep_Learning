@@ -12,7 +12,8 @@ def run():
 
     trainer = Trainer(cfg)
 
-    trainer.overfit_on_batch()
+    #trainer.overfit_on_batch()
+    trainer.fit()
 
 if __name__ == '__main__':
     run()
