@@ -12,12 +12,12 @@ class CrossEntripyLoss:
         self.labels = labels
         self.logits = self.softmax(logits)
         #return -np.sum(labels * np.log(self.logits))
-        return -np.sum(np.log(self.logits)[np.arange(len(self.labels)), self.labels])
+        return -np.mean(np.log(self.logits + np.finfo(np.float32).eps)[np.arange(len(self.labels)), self.labels])
 
     def softmax(self, x):
         self.x = x
         out = np.exp(x - np.max(x))
-        return out / np.max(out)
+        return out / np.sum(out, 1).reshape(-1, 1)
 
     def get_grad(self):
         """

@@ -71,6 +71,7 @@ class Trainer:
             batch_loss_list.append(batch_loss)
             batch_accuracy_list.append(batch_accuracy)
             batch_size_list.append(len(batch))
+            print(dataloader_type, batch_loss, batch_accuracy)
 
         total_loss = np.sum(np.dot(batch_loss_list, batch_size_list)) / np.sum(batch_size_list)
         total_accuracy = np.sum(np.dot(batch_accuracy_list, batch_size_list)) / np.sum(batch_size_list)
