@@ -18,7 +18,7 @@ CFG = {
         "shuffle": "True"
     },
     "train": {
-        "batch_size": 9,
+        "batch_size": 32,
         "nrof_epoch": 20,
         "optimizer": {
             "type": "adam"

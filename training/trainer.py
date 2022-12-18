@@ -37,8 +37,11 @@ class Trainer:
                                            None,
                                            cfg.train.nrof_epoch)
 
-        next(self.train_dataloader.batch_generator())
-        self.train_dataloader.show_batch()
+        # next(self.train_dataloader.batch_generator())
+        # self.train_dataloader.show_batch()
+
+        self.writer = SummaryWriter("mlp")
+        self.global_iteration = 0
 
     def fit(self):
         """
@@ -48,15 +51,33 @@ class Trainer:
         """
         for epoch in range(self.epochs):
             self.train_epoch()
-            self.evaluate(self.train_dataloader, 'train')
-            self.evaluate(self.test_dataloader, 'test')
+            self.evaluate(self.train_dataloader, 'train_loader')
+            self.evaluate(self.test_dataloader, 'test_loader')
 
-    def evaluate(self, dataloader, dataset_type):
+    def evaluate(self, dataloader: DataLoader, dataloader_type):
         """
         функция вычисления значения целевой функции и точности
         на всех данных из dataloader, сохранение результатов в tensorboard/mlflow/plotly
         :param dataloader: train_loader/valid_loader/test_loader
         """
+        batch_loss_list = []  # значение целевой функции на каждой итерации
+        batch_accuracy_list = []  # значение точности на каждой итерации
+        batch_size_list = []   # размер батча на каждой итерации
+
+        for batch, labels in dataloader.batch_generator():
+            logits = self.net(batch)
+            batch_loss = self.loss(logits, labels)
+            batch_accuracy = (np.argmax(logits, 1) == labels).mean()
+            batch_loss_list.append(batch_loss)
+            batch_accuracy_list.append(batch_accuracy)
+            batch_size_list.append(len(batch))
+            print(dataloader_type, batch_loss, batch_accuracy)
+
+        total_loss = np.sum(np.dot(batch_loss_list, batch_size_list)) / np.sum(batch_size_list)
+        total_accuracy = np.sum(np.dot(batch_accuracy_list, batch_size_list)) / np.sum(batch_size_list)
+        self.writer.add_scalar(dataloader_type + "/total_loss", total_loss, self.global_iteration)
+        self.writer.add_scalar(dataloader_type + "/total_accuracy", total_accuracy, self.global_iteration)
+
 
     def train_epoch(self):
         """
@@ -80,6 +101,10 @@ class Trainer:
         batch_loss = self.loss(logits, labels)
         batch_accuracy = (np.argmax(logits, 1) == labels).mean()
         self.optimiser.minimize()
+        self.writer.add_scalar('batch_loss', batch_loss, self.global_iteration)
+        self.writer.add_scalar('batch_accuracy',  batch_accuracy, self.global_iteration)
+        print(self.net.phase, batch_loss, batch_accuracy)
+        self.global_iteration += 1
         return batch_loss, batch_accuracy    # значения целевой функции и точности на этом батче
 
     def overfit_on_batch(self):
@@ -87,7 +112,8 @@ class Trainer:
         # берем 1 батч из выборки и на протяжении
         self.net.train()
         for i in range(1000):
-            batch_loss, batch_acurasy = self._train_step(batch, labels)
-            print(batch_loss, batch_acurasy)
+            batch_loss, batch_accuracy = self._train_step(batch, labels)
+            print(self.net.phase, batch_loss, batch_accuracy)
             # значение точности на протяжении 10 шагов подряд была 100%
         self.net.eval()
+

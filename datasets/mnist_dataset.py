@@ -48,9 +48,7 @@ class MNISTDataset:
         """
         :return: размер выборки
         """
-
         return len(self.__images)
-
 
     def one_hot_labels(self, label):
         """
@@ -87,6 +85,7 @@ class MNISTDataset:
         Необходимо вывести количество элементов в датасете, количество классов и количество элементов в каждом классе
         """
         unique, counts = np.unique(self.__labels, return_counts=True)
+        print(f'{self.__dataset_type}')
         print(f'количество элементов в датасете: {self.__len__()}')
         print(f'количество классов: {self.__nrof_classes}')
         print(f'количество элементов в каждом классе : {dict(zip(unique, counts))}')
