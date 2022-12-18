@@ -59,10 +59,8 @@ class MNISTDataset():
 
         if (abs(label) > self.__nrof_classes):
             raise ValueError('Такого класса нет в датасете')
-
         res = np.zeros(self.__nrof_classes)
         res[label] = 1
-
         return res
 
 
