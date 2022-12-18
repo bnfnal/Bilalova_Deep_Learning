@@ -1,6 +1,14 @@
-class BaseModel(object):
-    def __init__(self, parameters):
-        ...
+from layers.registry_utils import REGISTRY_TYPE
+from model.base_model import BaseModel
+
+class Model(BaseModel):
+
+    def __init__(self, parameters):  # список классов и гиперпараметров
+        super().__init__(parameters)
+        self.parameters = []
+        for parametr in parameters:
+            self.parameters.append(REGISTRY_TYPE.get(*parametr))
+    # проинициализировали все слои в нейронной сети
 
     def eval(self):
         self.phase = 'eval'
@@ -14,6 +22,9 @@ class BaseModel(object):
         :param input: батч значений предыдущего слоя
         :return: значения текущего слоя
         """
+        for layer in self.parameters:   # при исп input - вызывается метод __call__ из соотв слоя
+            input = layer(input, self.phase)
+        return input
 
     def get_parameters(self):
         """

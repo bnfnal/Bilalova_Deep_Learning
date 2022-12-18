@@ -1,6 +1,6 @@
 import torch
 
-from .base_model import BaseModel
+from example_model.example_base_model import BaseModel
 from nets.MLP import MLP
 from dataloader.dataloader import DataLoader
 

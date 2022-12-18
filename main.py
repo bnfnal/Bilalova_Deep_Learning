@@ -1,32 +1,19 @@
 # -*- coding: utf-8 -*-
 """ main.py """
-import json
 
-from configs.config import CFG
-from dataloader.dataloader import DataLoader
-from datasets.mnist_dataset import MNISTDataset
-from enums.Datasets import DataSetType
+from training.trainer import Trainer
 from utils.config import Config
-from ops.normalize import Normalize
-from ops.view import View
+
 
 def run():
-    """Builds model, loads data, trains and evaluates"""
+    """Builds model, loads datasets, trains and evaluates"""
 
     cfg = Config()
 
-    dataset = MNISTDataset(dataset_type = DataSetType.train,
-                                 transforms = [Normalize(),View()],
-                                 nrof_classes = cfg.data.nrof_classes)
+    trainer = Trainer(cfg)
 
-    dataload = DataLoader(dataset,
-                          cfg.train.batch_size,
-                          None,
-                          cfg.train.nrof_epoch)
-    dataset.read_data()
-
-    next(dataload.batch_generator())
-    dataload.show_batch()
+    #trainer.overfit_on_batch()
+    trainer.fit()
 
 if __name__ == '__main__':
     run()
