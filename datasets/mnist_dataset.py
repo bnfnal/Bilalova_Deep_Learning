@@ -7,7 +7,7 @@ import numpy as np
 
 """Класс по считыванию данных"""
 
-class MNISTDataset():
+class MNISTDataset:
     # :param dataset_type (string): (['train', 'valid', 'test']).
     # :param transforms (list): список необходимых преобразований изображений.
     # :param nrof_classes (int): количество классов в датасете.
@@ -30,6 +30,8 @@ class MNISTDataset():
         self.__nrof_classes = nrof_classes
 
         self.__stats = None
+
+        self.read_data()
         
 
     def read_data(self):

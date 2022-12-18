@@ -8,6 +8,7 @@ class ConfigModel(BaseConfigSection):
         self.__up_stack = {}
         self.__acivation_function = NULL
         self.__output = NULL
+        self.parameters = []
         super().__init__(section)
 
 
@@ -23,8 +24,9 @@ class ConfigModel(BaseConfigSection):
 
 
     def _fill_model_from_json(self, section):
-        self.__acivation_function = section['acivation_function']
-        self.__output = section['output']
-        self.__up_stack = self.__up_stack | section['up_stack']
-        for inputs in section['input']:
-            self.__input.append(inputs)
+        # self.__acivation_function = section['acivation_function']
+        # self.__output = section['output']
+        # self.__up_stack = self.__up_stack | section['up_stack']
+        # for inputs in section['input']:
+        #     self.__input.append(inputs)
+        pass

@@ -5,7 +5,7 @@
 Ваш эксперимент должен быть полностью описан здесь."""
 
 CFG = {
-    "data": {
+    "datasets": {
         "data_path": "./configs/mnist/",
         "images_train_file_name": "train-images.idx3-ubyte",
         "labels_train_file_name": "train-labels.idx1-ubyte",
@@ -23,16 +23,11 @@ CFG = {
         "optimizer": {
             "type": "adam"
         },
-        "metrics": ["accuracy", "balanced_accuracy"]
+        "metrics": ["accuracy", "balanced_accuracy"],
+        "learning_rate": 0.001
     },
     "model": {
-        "input": [28, 28, 1],
-        "up_stack": {
-            "layer_1": 128,
-            "layer_2": 128
-        },
-        "acivation_function": "relu",
-        "output": 10
+        "parametrs" : [('FullyConnected', {'input_size': 784, 'output_size': 128}), ('ReLU', {}), ('FullyConnected', {'input_size': 128, 'output_size': 10})]
     }
 }
 
