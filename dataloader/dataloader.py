@@ -63,10 +63,3 @@ class DataLoader:
 
         plt.subplots_adjust(wspace=0.2, hspace=0.5)
         plt.show()
-
-
-    def num_batches(self):
-        n = int(self.__dataset.__len__() / self.__batch_size)
-        if self.__dataset.__len__() % self.__batch_size > 0:
-            n += 1
-        return n

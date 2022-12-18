@@ -14,7 +14,7 @@ class Sigmoid(BaseLayerClass):
 
     def get_grad(self):
         out = np.exp(- self.x)
-        self.grads = out / (1 + out)^2
+        self.grads = out / (1 + out)**2
         return self.grads
 
     def backward(self, dy):
