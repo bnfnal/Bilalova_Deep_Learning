@@ -56,16 +56,15 @@ class MNISTDataset():
         :param label: метка класса
         :return: one-hot encoding вектор
         """
-        res = []
+
         if (abs(label) > self.__nrof_classes):
             raise ValueError('Такого класса нет в датасете')
 
-        for i in range(0, self.__nrof_classes):
-            if (i == label):
-                res.append(1)
-            else:
-                res.append(0)
+        res = np.zeros(self.__nrof_classes)
+        res[label] = 1
+
         return res
+
 
 
     def __getitem__(self, idx:int):
